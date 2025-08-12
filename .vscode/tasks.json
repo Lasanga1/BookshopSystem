@@ -1,0 +1,15 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"label": "Run Maven Tomcat Web App",
+			"command": "mvn clean package; mvn tomcat7:run",
+			"group": "build",
+			"isBackground": true,
+			"problemMatcher": [
+				"$javac"
+			]
+		}
+	]
+}
