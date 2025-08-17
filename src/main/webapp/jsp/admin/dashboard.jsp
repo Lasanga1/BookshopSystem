@@ -61,6 +61,12 @@
                 <p>Learn how to use the admin features</p>
                 <a href="<%=request.getContextPath()%>/jsp/admin/help.jsp" class="btn btn-secondary">View Help</a>
             </div>
+            
+            <div class="dashboard-card">
+                <h3>Web Services Test</h3>
+                <p>Test the new web services for simple operations</p>
+                <a href="<%=request.getContextPath()%>/jsp/admin/webservice-test.jsp" class="btn btn-info">Test Web Services</a>
+            </div>
         </div>
     </div>
 </body>
