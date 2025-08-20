@@ -11,7 +11,7 @@ public class BookDAO {
     
     public boolean createBook(Book book) {
         String sql = "INSERT INTO books (title, author, isbn, price, stock_quantity, category) VALUES (?, ?, ?, ?, ?, ?)";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             
             stmt.setString(1, book.getTitle());
@@ -32,7 +32,7 @@ public class BookDAO {
         List<Book> books = new ArrayList<>();
         String sql = "SELECT * FROM books ORDER BY title";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
             
@@ -55,7 +55,7 @@ public class BookDAO {
     
     public Book getBookById(int id) {
         String sql = "SELECT * FROM books WHERE id = ?";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             
             stmt.setInt(1, id);
@@ -80,7 +80,7 @@ public class BookDAO {
     
     public boolean updateBook(Book book) {
         String sql = "UPDATE books SET title = ?, author = ?, isbn = ?, price = ?, stock_quantity = ?, category = ? WHERE id = ?";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             
             stmt.setString(1, book.getTitle());
@@ -100,7 +100,7 @@ public class BookDAO {
     
     public boolean deleteBook(int id) {
         String sql = "DELETE FROM books WHERE id = ?";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             
             stmt.setInt(1, id);
@@ -113,7 +113,7 @@ public class BookDAO {
     
     public boolean updateStock(int bookId, int quantity) {
         String sql = "UPDATE books SET stock_quantity = stock_quantity - ? WHERE id = ? AND stock_quantity >= ?";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             
             stmt.setInt(1, quantity);

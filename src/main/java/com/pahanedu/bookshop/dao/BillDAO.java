@@ -17,7 +17,7 @@ public class BillDAO {
     public boolean createBill(Bill bill, List<BillItem> billItems) {
         Connection conn = null;
         try {
-            conn = DatabaseConnection.getConnection();
+            conn = DatabaseConnection.getInstance().getConnection();
             conn.setAutoCommit(false);
             
             // Insert bill
@@ -93,7 +93,7 @@ public class BillDAO {
                     "JOIN users u ON b.cashier_id = u.id " +
                     "ORDER BY b.created_at DESC";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
             
@@ -134,7 +134,7 @@ public class BillDAO {
                     "JOIN users u ON b.cashier_id = u.id " +
                     "WHERE b.id = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             
             stmt.setInt(1, id);
@@ -182,7 +182,7 @@ public class BillDAO {
                     "JOIN books b ON bi.book_id = b.id " +
                     "WHERE bi.bill_id = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             
             stmt.setInt(1, billId);
@@ -214,7 +214,7 @@ public class BillDAO {
     
     public String generateBillNumber() {
         String sql = "SELECT MAX(CAST(SUBSTRING(bill_number, 4) AS UNSIGNED)) as max_num FROM bills WHERE bill_number LIKE 'BIL%'";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
             

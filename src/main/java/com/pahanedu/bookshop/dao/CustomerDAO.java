@@ -11,7 +11,7 @@ public class CustomerDAO {
     
     public boolean createCustomer(Customer customer) {
         String sql = "INSERT INTO customers (account_number, name, address, telephone) VALUES (?, ?, ?, ?)";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             
             stmt.setString(1, customer.getAccountNumber());
@@ -30,7 +30,7 @@ public class CustomerDAO {
         List<Customer> customers = new ArrayList<>();
         String sql = "SELECT * FROM customers ORDER BY name";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
             
@@ -51,7 +51,7 @@ public class CustomerDAO {
     
     public Customer getCustomerById(int id) {
         String sql = "SELECT * FROM customers WHERE id = ?";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             
             stmt.setInt(1, id);
@@ -74,7 +74,7 @@ public class CustomerDAO {
     
     public boolean updateCustomer(Customer customer) {
         String sql = "UPDATE customers SET account_number = ?, name = ?, address = ?, telephone = ? WHERE id = ?";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             
             stmt.setString(1, customer.getAccountNumber());
@@ -92,7 +92,7 @@ public class CustomerDAO {
     
     public boolean deleteCustomer(int id) {
         String sql = "DELETE FROM customers WHERE id = ?";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             
             stmt.setInt(1, id);

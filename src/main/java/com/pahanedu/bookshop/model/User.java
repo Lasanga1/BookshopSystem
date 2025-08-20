@@ -1,8 +1,9 @@
 package com.pahanedu.bookshop.model;
 
+import com.pahanedu.bookshop.resource.factory.model.Product;
 import java.time.LocalDateTime;
 
-public class User {
+public class User implements Product {
     private int id;
     private String username;
     private String password;
@@ -80,5 +81,30 @@ public class User {
     
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+    
+    // Product interface implementation
+    @Override
+    public String getName() {
+        return this.fullName;
+    }
+    
+    @Override
+    public void setName(String name) {
+        this.fullName = name;
+    }
+    
+    @Override
+    public boolean isValid() {
+        return username != null && !username.trim().isEmpty() &&
+               password != null && !password.trim().isEmpty() &&
+               fullName != null && !fullName.trim().isEmpty() &&
+               userType != null;
+    }
+    
+    @Override
+    public String getDisplayInfo() {
+        return String.format("User: %s (Username: %s, Type: %s)",
+                           fullName, username, userType);
     }
 }

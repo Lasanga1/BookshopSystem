@@ -1,9 +1,10 @@
 package com.pahanedu.bookshop.model;
 
+import com.pahanedu.bookshop.resource.factory.model.Product;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public class Book {
+public class Book implements Product {
     private int id;
     private String title;
     private String author;
@@ -97,5 +98,32 @@ public class Book {
     
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+    
+    // Product interface implementation
+    @Override
+    public String getName() {
+        return this.title;
+    }
+    
+    @Override
+    public void setName(String name) {
+        this.title = name;
+    }
+    
+    @Override
+    public boolean isValid() {
+        return title != null && !title.trim().isEmpty() &&
+               author != null && !author.trim().isEmpty() &&
+               isbn != null && !isbn.trim().isEmpty() &&
+               price != null && price.compareTo(BigDecimal.ZERO) >= 0 &&
+               stockQuantity >= 0 &&
+               category != null && !category.trim().isEmpty();
+    }
+    
+    @Override
+    public String getDisplayInfo() {
+        return String.format("Book: %s by %s (ISBN: %s, Price: $%s, Stock: %d, Category: %s)",
+                           title, author, isbn, price, stockQuantity, category);
     }
 }
