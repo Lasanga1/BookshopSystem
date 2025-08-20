@@ -61,6 +61,8 @@
                 <p>Learn how to use the admin features</p>
                 <a href="<%=request.getContextPath()%>/jsp/admin/help.jsp" class="btn btn-secondary">View Help</a>
             </div>
+            
+            
         </div>
     </div>
 </body>

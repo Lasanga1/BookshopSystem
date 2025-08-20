@@ -58,12 +58,19 @@
                     </div>
                 </div>
                 
-                <div class="form-group">
-                    <label for="userType" class="form-label">User Type:</label>
-                    <select id="userType" name="userType" class="form-select" required>
-                        <option value="ADMIN" <%= editUser.getUserType() == User.UserType.ADMIN ? "selected" : "" %>>Admin</option>
-                        <option value="CASHIER" <%= editUser.getUserType() == User.UserType.CASHIER ? "selected" : "" %>>Cashier</option>
-                    </select>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="password" class="form-label">Password (leave blank to keep unchanged):</label>
+                        <input type="password" id="password" name="password" class="form-input">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="userType" class="form-label">User Type:</label>
+                        <select id="userType" name="userType" class="form-select" required>
+                            <option value="ADMIN" <%= editUser.getUserType() == User.UserType.ADMIN ? "selected" : "" %>>Admin</option>
+                            <option value="CASHIER" <%= editUser.getUserType() == User.UserType.CASHIER ? "selected" : "" %>>Cashier</option>
+                        </select>
+                    </div>
                 </div>
                 
                 <div class="form-group">

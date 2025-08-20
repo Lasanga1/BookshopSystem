@@ -1,6 +1,6 @@
 package com.pahanedu.bookshop.servlet.admin;
 
-import com.pahanedu.bookshop.dao.UserDAO;
+import com.pahanedu.bookshop.resource.factory.ProductFactoryManager;
 import com.pahanedu.bookshop.model.User;
 
 import javax.servlet.ServletException;
@@ -9,10 +9,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 public class AdminUserServlet extends HttpServlet {
     
-    private UserDAO userDAO = new UserDAO();
+    private ProductFactoryManager factoryManager = new ProductFactoryManager();
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
@@ -22,15 +23,17 @@ public class AdminUserServlet extends HttpServlet {
         
         if ("edit".equals(action)) {
             int id = Integer.parseInt(request.getParameter("id"));
-            User user = userDAO.getUserById(id);
-            request.setAttribute("user", user);
+            Optional<User> userOpt = factoryManager.getUserById(id);
+            if (userOpt.isPresent()) {
+                request.setAttribute("user", userOpt.get());
+            }
             request.getRequestDispatcher("/jsp/admin/edit-user.jsp").forward(request, response);
         } else if ("delete".equals(action)) {
             int id = Integer.parseInt(request.getParameter("id"));
-            userDAO.deleteUser(id);
+            factoryManager.deleteUser(id);
             response.sendRedirect(request.getContextPath() + "/admin/users");
         } else {
-            List<User> users = userDAO.getAllUsers();
+            List<User> users = factoryManager.getAllUsers();
             request.setAttribute("users", users);
             request.getRequestDispatcher("/jsp/admin/users.jsp").forward(request, response);
         }
@@ -43,16 +46,17 @@ public class AdminUserServlet extends HttpServlet {
         String action = request.getParameter("action");
         
         if ("add".equals(action)) {
-            User user = new User();
-            user.setUsername(request.getParameter("username"));
-            user.setPassword(request.getParameter("password"));
-            user.setFullName(request.getParameter("fullName"));
-            user.setUserType(User.UserType.valueOf(request.getParameter("userType")));
+            String username = request.getParameter("username");
+            String password = request.getParameter("password");
+            String fullName = request.getParameter("fullName");
+            User.UserType userType = User.UserType.valueOf(request.getParameter("userType"));
             
-            if (userDAO.createUser(user)) {
-                request.setAttribute("success", "User added successfully");
+            Optional<User> userOpt = factoryManager.createUser(username, password, fullName, userType);
+            
+            if (userOpt.isPresent()) {
+                request.setAttribute("success", "User added successfully using Factory Pattern");
             } else {
-                request.setAttribute("error", "Failed to add user");
+                request.setAttribute("error", "Failed to add user. Please check your input data.");
             }
         } else if ("update".equals(action)) {
             User user = new User();
@@ -60,15 +64,20 @@ public class AdminUserServlet extends HttpServlet {
             user.setUsername(request.getParameter("username"));
             user.setFullName(request.getParameter("fullName"));
             user.setUserType(User.UserType.valueOf(request.getParameter("userType")));
-            
-            if (userDAO.updateUser(user)) {
-                request.setAttribute("success", "User updated successfully");
+            // Handle password update if provided
+            String password = request.getParameter("password");
+            if (password != null && !password.trim().isEmpty()) {
+                user.setPassword(password);
+            }
+            // updateUser should handle password update if set
+            if (factoryManager.updateUser(user)) {
+                request.setAttribute("success", "User updated successfully using Factory Pattern");
             } else {
-                request.setAttribute("error", "Failed to update user");
+                request.setAttribute("error", "Failed to update user. Please check your input data.");
             }
         }
         
-        List<User> users = userDAO.getAllUsers();
+        List<User> users = factoryManager.getAllUsers();
         request.setAttribute("users", users);
         request.getRequestDispatcher("/jsp/admin/users.jsp").forward(request, response);
     }
